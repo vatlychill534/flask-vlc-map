@@ -15,10 +15,10 @@ def home():
 def about():
     return 'About'
 
-df = pd.read_csv('THOR-database.csv')    
+df = pd.read_csv('../THOR-database.csv')    
 
 location_data = []
-with open("location-data.json", 'r', encoding="utf-8") as file:
+with open("../location-data.json", 'r', encoding="utf-8") as file:
     location_data = json.load(file)
 
 def find_city_by_coordinates(lon, lat):
