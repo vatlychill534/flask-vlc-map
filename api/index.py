@@ -17,7 +17,7 @@ def about():
     return jsonify(df.to_dict(orient='records'))
 
 
-THOR_file_path = os.path.join(os.path.dirname(__file__), 'THOR-database.csv')
+THOR_file_path = "https://media.githubusercontent.com/media/vatlychill534/flask-vlc-map/refs/heads/main/api/THOR-database.csv"
 location_file_path = os.path.join(os.path.dirname(__file__), 'location-data.json')
 
 df = pd.read_csv(THOR_file_path)
