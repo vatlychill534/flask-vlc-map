@@ -119,6 +119,7 @@ def filter_data():
 
     return result
 
-
+"""
 if __name__ == '__main__':
     app.run(port=5000)
+"""
