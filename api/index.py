@@ -83,40 +83,39 @@ def get_tooltip(row):
     """
     return video_html
 
-@app.route('/filter', methods=['GET', 'POST'])
+@app.route('/filter')
 def filter_data():
-    if request.method == 'POST':
-        data = request.get_json()
+    missionyear = request.args.get('years', '').split(',')
+    missiontype = request.args.get('missions', '').split(',')
 
-        missiontype = data.get('missiontype', [])
-        missionyear = data.get('missionyear', [])
+    # Optional: convert years to int
+    missionyear = [int(y) for y in missionyear]
+    missiontype = [int(t) for t in missiontype]
 
-        df_h3 = df.copy()
-        df_h3 = df_h3[df_h3['missionyear'].isin(missionyear)]
-        df_h3 = df_h3[df_h3['missiontype'].isin(missiontype)]
+    df_h3 = df.copy()
+    df_h3 = df_h3[df_h3['missionyear'].isin(missionyear)]
+    df_h3 = df_h3[df_h3['missiontype'].isin(missiontype)]
 
-        h3_resolution = 6
+    h3_resolution = 6
+    result = []
+
+    try:
+        df_h3['h3_index'] = df_h3.apply(lambda row: h3.latlng_to_cell(row['target_lat'], row['target_lon'], h3_resolution), axis=1)
+        # Aggregate mission count per H3 hex
+        hex_counts = df_h3['h3_index'].value_counts().reset_index()
+        hex_counts.columns = ['h3_index', 'mission_count']
+
+        hex_counts["lat"] = hex_counts["h3_index"].apply(lambda h: h3.cell_to_latlng(h)[0])
+        hex_counts["lon"] = hex_counts["h3_index"].apply(lambda h: h3.cell_to_latlng(h)[1])
+
+        hex_counts['city'] = hex_counts.apply(lambda row: find_city_by_coordinates(row['lon'], row['lat']), axis=1)
+        hex_counts['country'] = hex_counts.apply(lambda row: find_country_by_coordinates(row['lon'], row['lat']), axis=1)
+
+        # Generate HTML tooltips with embedded video
+        hex_counts["tooltip"] = hex_counts.apply(get_tooltip, axis=1)
+        result = jsonify(hex_counts.to_dict(orient='records'))
+    except:
         result = []
 
-        try:
-            df_h3['h3_index'] = df_h3.apply(lambda row: h3.latlng_to_cell(row['target_lat'], row['target_lon'], h3_resolution), axis=1)
-            # Aggregate mission count per H3 hex
-            hex_counts = df_h3['h3_index'].value_counts().reset_index()
-            hex_counts.columns = ['h3_index', 'mission_count']
-
-            hex_counts["lat"] = hex_counts["h3_index"].apply(lambda h: h3.cell_to_latlng(h)[0])
-            hex_counts["lon"] = hex_counts["h3_index"].apply(lambda h: h3.cell_to_latlng(h)[1])
-
-            hex_counts['city'] = hex_counts.apply(lambda row: find_city_by_coordinates(row['lon'], row['lat']), axis=1)
-            hex_counts['country'] = hex_counts.apply(lambda row: find_country_by_coordinates(row['lon'], row['lat']), axis=1)
-
-            # Generate HTML tooltips with embedded video
-            hex_counts["tooltip"] = hex_counts.apply(get_tooltip, axis=1)
-            result = jsonify(hex_counts.to_dict(orient='records'))
-        except:
-            result = []
-
-        return result
-    else:
-        return "Hello, this is a GET request!"
+    return result
     
