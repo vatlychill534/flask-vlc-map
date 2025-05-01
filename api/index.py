@@ -15,11 +15,14 @@ def home():
 def about():
     return 'About'
 
-df = pd.read_csv('https://media.githubusercontent.com/media/vatlychill534/flask-vlc-map/refs/heads/main/THOR-database.csv')    
 
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
+THOR_file_path = os.path.join(parent_dir, 'THOR-database.csv')
+location_file_path = os.path.join(parent_dir, 'location-data.json')
+
+df = pd.read_csv(THOR_file_path)
 location_data = []
-
-location_file_path = os.path.join(os.path.dirname(__file__), 'location-data.json')
 
 with open(location_file_path, 'r', encoding="utf-8") as file:
     location_data = json.load(file)
