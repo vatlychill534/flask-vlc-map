@@ -3,7 +3,7 @@ from flask_cors import CORS
 import pandas as pd
 import h3
 import json
-
+import os
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin requests from other origins
 
@@ -18,7 +18,10 @@ def about():
 df = pd.read_csv('https://media.githubusercontent.com/media/vatlychill534/flask-vlc-map/refs/heads/main/THOR-database.csv')    
 
 location_data = []
-with open("location-data.json", 'r', encoding="utf-8") as file:
+
+location_file_path = os.path.join(os.path.dirname(__file__), 'location-data.json')
+
+with open(location_file_path, 'r', encoding="utf-8") as file:
     location_data = json.load(file)
 
 def find_city_by_coordinates(lon, lat):
