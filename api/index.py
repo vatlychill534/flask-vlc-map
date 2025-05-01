@@ -15,10 +15,10 @@ def home():
 def about():
     return 'About'
 
-df = pd.read_csv('../THOR-database.csv')    
+df = pd.read_csv('https://media.githubusercontent.com/media/vatlychill534/flask-vlc-map/refs/heads/main/THOR-database.csv')    
 
 location_data = []
-with open("../location-data.json", 'r', encoding="utf-8") as file:
+with open("location-data.json", 'r', encoding="utf-8") as file:
     location_data = json.load(file)
 
 def find_city_by_coordinates(lon, lat):
@@ -118,4 +118,7 @@ def filter_data():
         result = []
 
     return result
-    
+
+
+if __name__ == '__main__':
+    app.run(port=5000)
