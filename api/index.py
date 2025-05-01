@@ -18,10 +18,9 @@ def about():
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
-THOR_file_path = os.path.join(parent_dir, 'THOR-database.csv')
 location_file_path = os.path.join(parent_dir, 'location-data.json')
 
-df = pd.read_csv(THOR_file_path)
+df = pd.read_csv("https://github.com/vatlychill534/flask-vlc-map/blob/main/THOR-database.csv")
 location_data = []
 
 with open(location_file_path, 'r', encoding="utf-8") as file:
