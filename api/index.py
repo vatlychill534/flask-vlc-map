@@ -20,7 +20,7 @@ current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
 location_file_path = os.path.join(parent_dir, 'location-data.json')
 
-df = pd.read_csv("https://github.com/vatlychill534/flask-vlc-map/blob/main/THOR-database.csv")
+df = pd.read_csv("https://media.githubusercontent.com/media/vatlychill534/flask-vlc-map/refs/heads/main/THOR-database.csv")
 location_data = []
 
 with open(location_file_path, 'r', encoding="utf-8") as file:
