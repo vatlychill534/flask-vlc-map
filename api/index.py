@@ -4,6 +4,7 @@ import pandas as pd
 import h3
 import json
 import os
+
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin requests from other origins
 
@@ -16,11 +17,10 @@ def about():
     return 'About'
 
 
-current_dir = os.path.dirname(__file__)
-parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
-location_file_path = os.path.join(parent_dir, 'location-data.json')
+THOR_file_path = os.path.join(os.path.dirname(__file__), 'THOR-database.csv')
+location_file_path = os.path.join(os.path.dirname(__file__), 'location-data.json')
 
-df = pd.read_csv("https://media.githubusercontent.com/media/vatlychill534/flask-vlc-map/refs/heads/main/THOR-database.csv")
+df = pd.read_csv(THOR_file_path)
 location_data = []
 
 with open(location_file_path, 'r', encoding="utf-8") as file:
