@@ -14,7 +14,7 @@ def home():
 
 @app.route('/about')
 def about():
-    return 'About'
+    return jsonify(df.to_dict(orient='records'))
 
 
 THOR_file_path = os.path.join(os.path.dirname(__file__), 'THOR-database.csv')
